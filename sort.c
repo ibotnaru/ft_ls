@@ -6,29 +6,59 @@
 /*   By: ibotnaru <ibotnaru@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/08 18:49:34 by ibotnaru          #+#    #+#             */
-/*   Updated: 2020/02/10 18:20:10 by ibotnaru         ###   ########.fr       */
+/*   Updated: 2020/02/15 21:26:47 by ibotnaru         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void    sort_and_display(char flag, struct dirent *sd)
+// char    *create_newarr(char strings_arr[][MAX_LEN], int size_arr)
+// {
+    // int i  = 0;
+    // int j = 0;
+    // char    *new_stringarr[MAX_LEN];
+// 
+    // while (i < size_arr)
+    // {
+        // if (strings_arr[i][0] != '.')
+            // ft_strcpy(new_stringarr[j], strings_arr[i]);
+        // i++;
+        // j++;
+    // }
+    // return (new_stringarr);
+// }
+
+/*  Call different function depending on the flag.
+    These functions do the soting and dispay the contetn. */
+void    sort_and_display(char flag, char strings_arr[][MAX_LEN], int size_arr)
 {
+    char    **new_arr;
+
     if (flag == '0')
-        no_flags(sd);
+        no_flags(strings_arr, size_arr);
     else if (flag == 'l')
-        l_flag(sd);
+        l_flag(strings_arr, size_arr);
     else if (flag == 't')
-        t_flag(sd);
+    {
+        // sort the string by modification date
+        // new_stringarr = create_newarr(strings_arr, size_arr);
+        new_arr = mtime_sort(strings_arr, size_arr);
+        t_flag(new_arr, size_arr);
+    }
     else if (flag == 'r')
-        r_flag(sd);
+        r_flag(strings_arr, size_arr);
     else if (flag == 'R')
-        R_flag(sd);
+        R_flag(strings_arr, size_arr);
     else if (flag == 'a')
-        a_flag(sd);    
+        a_flag(strings_arr, size_arr);    
 }
 
-void    arrstring_sort(char arr[][MAX_LEN], int size) 
+/*  Function that sorts an array of strings where length of every 
+    string should be smaller than MAX_LEN 
+    
+    !! This function works fine (I checked) */
+
+void    arrstring_sort(char strings_arr[][MAX_LEN], int size) 
 { 
     int i;
     int j;
@@ -43,22 +73,22 @@ void    arrstring_sort(char arr[][MAX_LEN], int size)
     { 
         min_idx = i;
         j = i + 1;
-        ft_strcpy(min_str, arr[i]); 
+        ft_strcpy(min_str, strings_arr[i]); 
         while (j < size) 
         { 
-            if (ft_strcmp(min_str, arr[j]) > 0) 
+            if (ft_strcmp(min_str, strings_arr[j]) > 0) 
             { 
-                ft_strcpy(min_str, arr[j]); 
+                ft_strcpy(min_str, strings_arr[j]); 
                 min_idx = j; 
             }
             j++;
         } 
         if (min_idx != i) 
         { 
-            ft_strcpy(temp, arr[i]);
-            ft_strcpy(arr[i], arr[min_idx]);
-            ft_strcpy(arr[min_idx], temp);
+            ft_strcpy(temp, strings_arr[i]);
+            ft_strcpy(strings_arr[i], strings_arr[min_idx]);
+            ft_strcpy(strings_arr[min_idx], temp);
         }
         i++; 
     }
-} 
+}
